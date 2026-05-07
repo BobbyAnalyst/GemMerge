@@ -329,7 +329,7 @@
   }
   #ghost.is-dragging { display: block; }
 
-  /* Confirm dialog */
+  /* Confirm dialog — matches in-game "Are you Sure?" sell prompt */
   .overlay {
     position: absolute; inset: 0;
     background: rgba(8, 14, 28, 0.55);
@@ -339,13 +339,14 @@
   }
   .overlay[hidden] { display: none; }
   .dialog {
+    position: relative;
     width: 100%;
-    max-width: 340px;
-    background: linear-gradient(180deg, #fff7e6 0%, #fbe6c2 100%);
-    border: 3px solid #6e4a1f;
-    border-radius: 22px;
+    max-width: 320px;
+    background: linear-gradient(180deg, #4ea7d2 0%, #2f7ba4 100%);
+    border: 4px solid #2f7ba4;
+    border-radius: 24px;
     box-shadow: var(--shadow);
-    padding: 18px 18px 16px;
+    padding: 38px 16px 16px;
     color: var(--ink);
     animation: pop 180ms cubic-bezier(.2,1.3,.4,1);
   }
@@ -353,68 +354,81 @@
     from { transform: translateY(20px) scale(.96); opacity: 0; }
     to   { transform: translateY(0) scale(1); opacity: 1; }
   }
-  .dialog h1 {
-    margin: 2px 0 4px;
-    text-align: center;
-    font-size: 22px; font-weight: 800;
-    color: #4a2a0a;
-    text-shadow: 0 2px 0 #fff8;
-  }
-  .dialog .sub { text-align: center; color: #6b5944; font-size: 13px; margin: 0 0 14px; }
-  .preview {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center; gap: 10px;
-    background: #fff3da;
-    border: 2px solid #c9a87a;
+  .dialog .title-banner {
+    position: absolute; top: -18px; left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, #5fb3ff, #2b8be6);
+    border: 4px solid #ffd84a;
     border-radius: 16px;
-    padding: 12px 8px; margin-bottom: 14px;
+    padding: 8px 22px;
+    color: #fff;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: .5px;
+    text-shadow:
+      -2px -2px 0 #1c5d99, 2px -2px 0 #1c5d99,
+      -2px  2px 0 #1c5d99, 2px  2px 0 #1c5d99,
+      0 3px 0 #1c5d99;
+    box-shadow: 0 4px 0 rgba(0,0,0,.25);
+    white-space: nowrap;
   }
-  .slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .dialog .close-x {
+    position: absolute; top: -14px; right: -14px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #ff8a8a, var(--red));
+    border: 3px solid #fff;
+    color: #fff;
+    font-weight: 900; font-size: 20px;
+    display: grid; place-items: center;
+    cursor: pointer;
+    box-shadow: 0 3px 0 rgba(0,0,0,.3);
+  }
+  .dialog .body {
+    background: linear-gradient(180deg, #fff7e6, #f3e4c2);
+    border-radius: 14px;
+    padding: 22px 16px 16px;
+    text-align: center;
+  }
+  .dialog .body p {
+    margin: 0 0 14px;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.3;
+  }
   .icon {
     width: 78px; height: 78px;
+    margin: 0 auto;
     border-radius: 14px;
     background: linear-gradient(180deg, #fff, #e6e6e6);
     border: 2px solid #6e4a1f;
     box-shadow: inset 0 -3px 0 rgba(0,0,0,.08);
     display: grid; place-items: center;
-    font-size: 38px; line-height: 1;
+    font-size: 44px; line-height: 1;
   }
-  .icon.glow {
-    background: radial-gradient(circle at 50% 45%, #fff5b8 0%, #ffe16a 55%, #f4b842 100%);
-    border-color: #c98a1c;
-    box-shadow: 0 0 0 3px #fff5b855, inset 0 -3px 0 rgba(0,0,0,.1);
+  .dialog hr {
+    border: 0;
+    border-top: 2px solid #c9a87a;
+    margin: 16px 8px 14px;
   }
-  .level-pill {
-    background: #fff;
-    border: 2px solid #6e4a1f;
-    border-radius: 999px;
-    padding: 2px 10px;
-    font-size: 12px; font-weight: 800; color: var(--ink);
-    box-shadow: 0 2px 0 rgba(0,0,0,.1);
-  }
-  .level-pill.next { background: #fff7c2; color: #6a4a00; }
-  .arrow { font-size: 26px; font-weight: 900; color: #6e4a1f; text-shadow: 0 2px 0 #fff8; }
   .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .btn-act {
     appearance: none; border: 0; cursor: pointer;
-    font: inherit; font-weight: 800; font-size: 17px; letter-spacing: .3px;
-    color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.25);
-    border-radius: 14px; padding: 12px 8px;
-    box-shadow: var(--shadow);
+    font: inherit; font-weight: 900; font-size: 18px; letter-spacing: .5px;
+    color: #fff;
+    text-shadow:
+      -1px -1px 0 rgba(0,0,0,.35), 1px -1px 0 rgba(0,0,0,.35),
+      -1px  1px 0 rgba(0,0,0,.35), 1px  1px 0 rgba(0,0,0,.35),
+      0 2px 0 rgba(0,0,0,.4);
+    border-radius: 14px;
+    padding: 12px 8px;
+    box-shadow: 0 4px 0 rgba(0,0,0,.3);
     transition: transform 80ms ease, filter 80ms ease;
   }
-  .btn-act:active { transform: translateY(2px); filter: brightness(.95); }
-  .btn-act.cancel  { background: linear-gradient(180deg, #ff6b6b, var(--red));   border: 2px solid var(--red-d); }
-  .btn-act.confirm { background: linear-gradient(180deg, #6ed664, var(--green)); border: 2px solid var(--green-d); }
-  .cost { margin: 10px 0 0; text-align: center; font-size: 12px; color: #6b5944; }
-  .cost .gem-mini {
-    display: inline-block; width: 14px; height: 14px;
-    vertical-align: -3px; margin: 0 4px 0 0;
-    background: radial-gradient(circle at 35% 30%, #fff, #6cf 40%, #19c 75%);
-    border-radius: 4px; transform: rotate(45deg);
-    box-shadow: 0 0 6px #6cf;
-  }
+  .btn-act:active { transform: translateY(2px); filter: brightness(.95); box-shadow: 0 2px 0 rgba(0,0,0,.3); }
+  .btn-act.cancel  { background: linear-gradient(180deg, #ff8a8a, var(--red));   border: 3px solid var(--red-d); }
+  .btn-act.confirm { background: linear-gradient(180deg, #8fe27f, var(--green)); border: 3px solid var(--green-d); }
 
   /* Reset button (small, sits inside the screen above the nav) */
   .reset-fab {
@@ -532,27 +546,20 @@
         <div class="board" id="board"></div>
       </div>
 
-      <!-- Confirm dialog -->
+      <!-- Confirm dialog (matches in-game "Are you Sure?" pattern) -->
       <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" hidden>
         <div class="dialog">
-          <h1 id="dlgTitle">Upgrade item?</h1>
-          <p class="sub">This will use your <strong>Max Merge Stone</strong>.</p>
-          <div class="preview">
-            <div class="slot">
-              <div id="iconBefore" class="icon"></div>
-              <span class="level-pill" id="lvBefore">Lv —</span>
-            </div>
-            <div class="arrow">→</div>
-            <div class="slot">
-              <div id="iconAfter" class="icon glow"></div>
-              <span class="level-pill next" id="lvAfter">Lv —</span>
+          <div class="title-banner" id="dlgTitle">Are you Sure?</div>
+          <button class="close-x" id="btnClose" type="button" aria-label="Close">✕</button>
+          <div class="body">
+            <p>You are upgrading an item.</p>
+            <div id="iconTarget" class="icon"></div>
+            <hr />
+            <div class="actions">
+              <button class="btn-act confirm" id="btnConfirm" type="button">MERGE</button>
+              <button class="btn-act cancel"  id="btnCancel"  type="button">CANCEL</button>
             </div>
           </div>
-          <div class="actions">
-            <button class="btn-act cancel"  id="btnCancel"  type="button">Cancel</button>
-            <button class="btn-act confirm" id="btnConfirm" type="button">Confirm</button>
-          </div>
-          <p class="cost"><span class="gem-mini"></span>Costs 1 Max Merge Stone</p>
         </div>
       </div>
 
@@ -606,12 +613,10 @@ const INITIAL = {
 
 const board = document.getElementById('board');
 const overlay  = document.getElementById('overlay');
-const iconBefore = document.getElementById('iconBefore');
-const iconAfter  = document.getElementById('iconAfter');
-const lvBefore   = document.getElementById('lvBefore');
-const lvAfter    = document.getElementById('lvAfter');
+const iconTarget = document.getElementById('iconTarget');
 const btnCancel  = document.getElementById('btnCancel');
 const btnConfirm = document.getElementById('btnConfirm');
+const btnClose   = document.getElementById('btnClose');
 const ghost      = document.getElementById('ghost');
 
 let cells = [];
@@ -762,11 +767,7 @@ function openDialog(gemEl, cell) {
   const targetItem = cell.querySelector('.item');
   pending = { gemEl, targetItemEl: targetItem, targetCell: cell };
   const fam = FAMILIES[targetItem.dataset.family];
-  const t = parseInt(targetItem.dataset.tier, 10);
-  iconBefore.innerHTML = '<span>' + fam.glyph + '</span>';
-  iconAfter.innerHTML  = '<span>' + fam.glyph + '</span>';
-  lvBefore.textContent = 'Lv ' + t;
-  lvAfter.textContent  = 'Lv ' + (t + 1);
+  iconTarget.innerHTML = '<span>' + fam.glyph + '</span>';
   overlay.hidden = false;
 }
 function closeDialog() {
@@ -774,6 +775,7 @@ function closeDialog() {
   pending = null;
 }
 btnCancel.addEventListener('click', closeDialog);
+btnClose.addEventListener('click', closeDialog);
 btnConfirm.addEventListener('click', () => {
   if (!pending) { closeDialog(); return; }
   const { gemEl, targetItemEl, targetCell } = pending;
