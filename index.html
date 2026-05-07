@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GemMerge — Mergedom Mockups</title>
+<style>
+  :root {
+    --brown: #6e4a1f;
+    --ink: #2a1d0f;
+    --gold: #f4c33b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(1200px 600px at 20% 0%, #1d2a44 0%, #0e1726 60%) fixed, #0e1726;
+    color: #e8e8ee;
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 48px 24px 80px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 {
+    font-size: 32px;
+    margin: 0 0 6px;
+    color: #ffe7a8;
+    letter-spacing: .3px;
+  }
+  p.lead {
+    color: #aab3c8;
+    margin: 0 0 32px;
+    font-size: 15px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  a.card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #14203a;
+    border: 1px solid #28385f;
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: transform 100ms ease, border-color 100ms ease, background 100ms ease;
+  }
+  a.card:hover {
+    transform: translateY(-2px);
+    border-color: #4a72d0;
+    background: #18264a;
+  }
+  a.card h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    color: #ffe7a8;
+    letter-spacing: .2px;
+  }
+  a.card p {
+    margin: 0;
+    color: #aab3c8;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  a.card .pill {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 2px 10px;
+    background: #2a4cb8;
+    border: 1px solid #3d6cf0;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .3px;
+  }
+  footer {
+    margin-top: 48px;
+    color: #5e6987;
+    font-size: 12px;
+  }
+  footer a { color: #8ec1ff; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>GemMerge — Mockups</h1>
+    <p class="lead">Interactive HTML mockups for the Mergedom <strong>Max-Tier Merge Stone Confirmation</strong> feature. Open each on a phone or in a desktop browser.</p>
+
+    <div class="grid">
+      <a class="card" href="merge-confirm-demo.html">
+        <h2>Merge + Confirm Demo</h2>
+        <p>Drag-and-drop mini-board with 5 items + 3 max-tier gems. Same-tier items merge silently; gems trigger the confirm dialog.</p>
+        <span class="pill">Interactive</span>
+      </a>
+
+      <a class="card" href="max-tier-merge-stone-confirm.html">
+        <h2>Max-Tier Stone — Full Board</h2>
+        <p>Full 7×9 board populated across 8 item families with multiple max-tier examples. Demonstrates upgrade flow and the "already max" block-toast.</p>
+        <span class="pill">Interactive</span>
+      </a>
+
+      <a class="card" href="board-shell.html">
+        <h2>Board Shell</h2>
+        <p>Clean reusable UI shell — HUD, two empty orders, info banner, empty board, bottom nav. Starting template for new mockups.</p>
+        <span class="pill">Static</span>
+      </a>
+    </div>
+
+    <footer>
+      Source: <a href="https://github.com/BobbyAnalyst/GemMerge">github.com/BobbyAnalyst/GemMerge</a>
+    </footer>
+  </div>
+</body>
+</html>
