@@ -2,13 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GemMerge — Mergedom Mockups</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Mergedom — Merge + Confirm Demo</title>
 <style>
   :root {
+    --phone-w: 414px;
+    --phone-h: 896px;
+    --peach: #f3e4c2;
+    --peach-d: #d8c290;
     --brown: #6e4a1f;
+    --brown-d: #4a2a0a;
     --ink: #2a1d0f;
+    --board-a: #6cc6f0;
+    --board-b: #4ea7d2;
+    --cell:   #8ed5f0;
+    --cell-line: #6fb8d6;
+    --green: #4cb944;
+    --green-d: #2f8a2a;
+    --red: #e64545;
+    --red-d: #b22f2f;
     --gold: #f4c33b;
+    --shadow: 0 8px 0 rgba(0,0,0,0.18), 0 14px 30px rgba(0,0,0,0.35);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -16,101 +30,771 @@
     min-height: 100vh;
     background: radial-gradient(1200px 600px at 20% 0%, #1d2a44 0%, #0e1726 60%) fixed, #0e1726;
     color: #e8e8ee;
-    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    padding: 48px 24px 80px;
-  }
-  .wrap { max-width: 880px; margin: 0 auto; }
-  h1 {
-    font-size: 32px;
-    margin: 0 0 6px;
-    color: #ffe7a8;
-    letter-spacing: .3px;
-  }
-  p.lead {
-    color: #aab3c8;
-    margin: 0 0 32px;
-    font-size: 15px;
-  }
-  .grid {
+    font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 18px;
+    place-items: start center;
+    padding: 32px 16px;
   }
-  a.card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    background: #14203a;
-    border: 1px solid #28385f;
-    border-radius: 14px;
-    padding: 18px 20px;
-    transition: transform 100ms ease, border-color 100ms ease, background 100ms ease;
+
+  /* ── Phone frame ──────────────────────────────────────────── */
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    border-radius: 44px;
+    background: #111;
+    padding: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 2px #1a1a1a inset;
+    position: relative;
   }
-  a.card:hover {
-    transform: translateY(-2px);
-    border-color: #4a72d0;
-    background: #18264a;
+  .screen {
+    position: relative;
+    width: 100%; height: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #cfdfe8 0%, #c1d3df 6%, #bfd1de 12%, #aac3d3 12.1%);
+    display: flex;
+    flex-direction: column;
   }
-  a.card h2 {
-    margin: 0 0 8px;
-    font-size: 17px;
-    color: #ffe7a8;
-    letter-spacing: .2px;
+  .room-bg {
+    position: absolute;
+    left: 0; right: 0; top: 0; height: 30%;
+    background: radial-gradient(120% 70% at 50% 100%, #bfd6e1 0%, #aac3d3 70%, #92b0c2 100%);
+    z-index: 0;
   }
-  a.card p {
-    margin: 0;
-    color: #aab3c8;
-    font-size: 13px;
-    line-height: 1.5;
+
+  /* HUD */
+  .hud {
+    position: relative; z-index: 2;
+    padding: 14px 12px 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 6px;
+    align-items: center;
   }
-  a.card .pill {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 2px 10px;
-    background: #2a4cb8;
-    border: 1px solid #3d6cf0;
+  .pill {
+    background: #fff7e6;
+    border: 2.5px solid var(--brown);
     border-radius: 999px;
+    padding: 3px 10px 3px 28px;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--ink);
+    position: relative;
+    box-shadow: 0 2px 0 rgba(0,0,0,.18);
+    text-align: center;
+  }
+  .pill .badge {
+    position: absolute;
+    left: -6px; top: 50%;
+    transform: translateY(-50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2.5px solid var(--brown);
+    display: grid; place-items: center;
+    font-size: 16px;
+    box-shadow: 0 2px 0 rgba(0,0,0,.2);
+  }
+  .pill .plus {
+    position: absolute;
+    right: -8px; top: 50%;
+    transform: translateY(-50%);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #6ed664, var(--green));
+    border: 2px solid var(--green-d);
+    color: #fff; font-weight: 900; font-size: 16px;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 0 rgba(0,0,0,.2);
+    line-height: 0;
+  }
+  .pill.energy .badge { background: linear-gradient(180deg, #b4e0ff, #5fb3ff); color: #fff; }
+  .pill.energy .badge::before { content: '⚡'; filter: drop-shadow(0 1px 0 #0006); }
+  .pill.star   .badge { background: radial-gradient(circle at 30% 30%, #fff5b8, #ffd84a 60%, #c98a1c); color: #6a4a00; font-size: 14px; }
+  .pill.star   .badge::before { content: '★'; }
+  .pill.coin   .badge { background: linear-gradient(180deg, #fff0a8, #ffcd34); color: #6a4a00; }
+  .pill.coin   .badge::before { content: '🏠'; font-size: 14px; }
+  .pill.energy { padding-right: 22px; }
+  .pill.star { padding-right: 10px; }
+  .pill.coin  { padding-right: 22px; }
+
+  .cog {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #c8d8e6, #93afc2);
+    border: 2.5px solid #4f6d80;
     color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .3px;
+    display: grid; place-items: center;
+    font-size: 18px;
+    box-shadow: 0 3px 0 rgba(0,0,0,.25);
+    cursor: pointer;
   }
-  footer {
-    margin-top: 48px;
-    color: #5e6987;
-    font-size: 12px;
+
+  /* Orders */
+  .avatars {
+    position: relative; z-index: 2;
+    margin: 8px 10px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 14px;
   }
-  footer a { color: #8ec1ff; }
+  .order {
+    position: relative;
+    background: linear-gradient(180deg, #fffbe9, #f3e4c2);
+    border: 2.5px solid var(--brown);
+    border-radius: 18px;
+    padding: 6px 10px 6px 64px;
+    height: 76px;
+    box-shadow: 0 3px 0 rgba(0,0,0,.2);
+    display: flex; align-items: center; gap: 8px;
+    overflow: visible;
+  }
+  .npc {
+    position: absolute; left: -8px; top: 50%;
+    transform: translateY(-50%);
+    width: 64px; height: 78px;
+    background: linear-gradient(180deg, #bfd6e1, #8aabc1);
+    border: 2.5px solid #355a6f;
+    border-radius: 50% 50% 18px 18px / 60% 60% 18px 18px;
+    display: grid; place-items: end center;
+    color: #2a3344;
+    font-size: 38px; line-height: 1;
+    overflow: hidden;
+  }
+  .npc.bearded::after { content: '🧔🏻'; font-size: 38px; margin-bottom: 4px; }
+  .npc.boy-npc {
+    background: linear-gradient(180deg, #efe1d2, #c79f7c);
+    border-color: #6e4a1f;
+  }
+  .npc.boy-npc::after { content: '👦'; font-size: 38px; margin-bottom: 4px; }
+  .order-slot {
+    width: 50px; height: 50px;
+    background: #fff7e6;
+    border: 2.5px solid var(--brown);
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 26px;
+    margin-left: auto;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,.1);
+    position: relative;
+  }
+  .order-reward {
+    position: absolute; top: -10px; right: 38px;
+    background: linear-gradient(180deg, #fff0a8, #ffcd34);
+    border: 2px solid #c98a1c;
+    border-radius: 999px;
+    padding: 2px 8px 2px 22px;
+    font-weight: 900; font-size: 12px; color: #6a4a00;
+    box-shadow: 0 2px 0 rgba(0,0,0,.2);
+  }
+  .order-reward::before {
+    content: '★';
+    position: absolute; left: -4px; top: -6px;
+    width: 22px; height: 22px;
+    background: radial-gradient(circle at 30% 30%, #fff5b8, #ffd84a 60%, #c98a1c);
+    border: 2px solid #c98a1c;
+    border-radius: 50%;
+    color: #6a4a00; font-size: 14px;
+    display: grid; place-items: center;
+  }
+
+  /* Info banner */
+  .banner {
+    position: relative; z-index: 2;
+    margin: 10px 10px 0;
+  }
+  .banner .info {
+    background: #fff7e6;
+    border: 2.5px solid var(--brown);
+    border-radius: 16px;
+    padding: 10px 14px 10px 50px;
+    color: var(--ink);
+    font-weight: 800; font-size: 14px;
+    position: relative;
+    box-shadow: 0 3px 0 rgba(0,0,0,.18);
+    display: flex; align-items: center;
+  }
+  .banner .info::before {
+    content: 'i';
+    position: absolute; left: 8px; top: 50%;
+    transform: translateY(-50%);
+    width: 30px; height: 30px;
+    background: linear-gradient(180deg, #6ec0ff, #2b8be6);
+    border: 2px solid #155a92;
+    border-radius: 50%;
+    color: #fff;
+    font-style: italic;
+    font-weight: 900;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 0 rgba(0,0,0,.2);
+  }
+
+  /* Board */
+  .board-wrap {
+    position: relative; z-index: 1;
+    margin: 10px 10px 18px;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+  }
+  .board {
+    flex: 1;
+    padding: 8px;
+    background: linear-gradient(180deg, var(--board-a), var(--board-b));
+    border: 3px solid #2f7ba4;
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 4px;
+    overflow: hidden;
+  }
+  .cell {
+    background: var(--cell);
+    border: 1px solid var(--cell-line);
+    border-radius: 8px;
+    position: relative;
+    display: grid; place-items: center;
+    transition: background 80ms ease;
+    user-select: none;
+  }
+  .cell.drop-ok      { background: #ffe16a; box-shadow: inset 0 0 0 2px #c98a1c; }
+  .cell.drop-merge   { background: #b6f0a0; box-shadow: inset 0 0 0 2px #2f8a2a; }
+  .cell.drop-confirm { background: #ffd884; box-shadow: inset 0 0 0 2px #b86a14; }
+  .cell.drop-bad     { background: #ff8a8a; box-shadow: inset 0 0 0 2px #b22f2f; }
+
+  .item {
+    width: 84%;
+    height: 84%;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fff, #e6e6e6);
+    border: 2px solid #6e4a1f;
+    box-shadow: 0 2px 0 rgba(0,0,0,.18);
+    display: grid; place-items: center;
+    position: relative;
+    cursor: grab;
+    font-size: 24px;
+    line-height: 1;
+    touch-action: none;
+  }
+  .item:active { cursor: grabbing; }
+  .item .tier-pill {
+    position: absolute;
+    top: -6px; right: -6px;
+    background: #4a2a0a;
+    color: #ffe7a8;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 999px;
+    border: 1px solid #ffe7a8;
+  }
+  .item.dragging { opacity: .25; }
+
+  /* Gem (T6 max merge stone) */
+  .item.gem {
+    background: radial-gradient(circle at 35% 30%, #fff, #6cf 40%, #19c 75%);
+    border-color: #1a5b87;
+    box-shadow: 0 0 10px #6cf, 0 2px 0 rgba(0,0,0,.18);
+  }
+  .item.gem::after {
+    content: 'T6';
+    position: absolute;
+    bottom: -6px; left: 50%;
+    transform: translateX(-50%);
+    background: #c98a1c;
+    color: #fff;
+    font-size: 9px; font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 999px;
+    border: 1px solid #fff;
+  }
+  .item.gem .glyph { filter: drop-shadow(0 0 4px #fff); }
+
+  /* upgrade flash */
+  @keyframes upgrade-flash {
+    0%   { box-shadow: 0 0 0 0 #fff5b8cc, 0 2px 0 rgba(0,0,0,.18); transform: scale(1); }
+    50%  { box-shadow: 0 0 18px 12px #fff5b8aa, 0 2px 0 rgba(0,0,0,.18); transform: scale(1.18); }
+    100% { box-shadow: 0 0 0 0 #fff5b800, 0 2px 0 rgba(0,0,0,.18); transform: scale(1); }
+  }
+  .item.upgrading { animation: upgrade-flash 600ms ease; }
+
+  /* Drag ghost */
+  #ghost {
+    position: fixed; left: 0; top: 0;
+    width: 56px; height: 56px;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+  }
+  #ghost.is-dragging { display: block; }
+
+  /* Confirm dialog */
+  .overlay {
+    position: absolute; inset: 0;
+    background: rgba(8, 14, 28, 0.55);
+    display: flex; align-items: center; justify-content: center;
+    padding: 18px;
+    z-index: 50;
+  }
+  .overlay[hidden] { display: none; }
+  .dialog {
+    width: 100%;
+    max-width: 340px;
+    background: linear-gradient(180deg, #fff7e6 0%, #fbe6c2 100%);
+    border: 3px solid #6e4a1f;
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 18px 18px 16px;
+    color: var(--ink);
+    animation: pop 180ms cubic-bezier(.2,1.3,.4,1);
+  }
+  @keyframes pop {
+    from { transform: translateY(20px) scale(.96); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .dialog h1 {
+    margin: 2px 0 4px;
+    text-align: center;
+    font-size: 22px; font-weight: 800;
+    color: #4a2a0a;
+    text-shadow: 0 2px 0 #fff8;
+  }
+  .dialog .sub { text-align: center; color: #6b5944; font-size: 13px; margin: 0 0 14px; }
+  .preview {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 10px;
+    background: #fff3da;
+    border: 2px solid #c9a87a;
+    border-radius: 16px;
+    padding: 12px 8px; margin-bottom: 14px;
+  }
+  .slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .icon {
+    width: 78px; height: 78px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fff, #e6e6e6);
+    border: 2px solid #6e4a1f;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,.08);
+    display: grid; place-items: center;
+    font-size: 38px; line-height: 1;
+  }
+  .icon.glow {
+    background: radial-gradient(circle at 50% 45%, #fff5b8 0%, #ffe16a 55%, #f4b842 100%);
+    border-color: #c98a1c;
+    box-shadow: 0 0 0 3px #fff5b855, inset 0 -3px 0 rgba(0,0,0,.1);
+  }
+  .level-pill {
+    background: #fff;
+    border: 2px solid #6e4a1f;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 12px; font-weight: 800; color: var(--ink);
+    box-shadow: 0 2px 0 rgba(0,0,0,.1);
+  }
+  .level-pill.next { background: #fff7c2; color: #6a4a00; }
+  .arrow { font-size: 26px; font-weight: 900; color: #6e4a1f; text-shadow: 0 2px 0 #fff8; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn-act {
+    appearance: none; border: 0; cursor: pointer;
+    font: inherit; font-weight: 800; font-size: 17px; letter-spacing: .3px;
+    color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.25);
+    border-radius: 14px; padding: 12px 8px;
+    box-shadow: var(--shadow);
+    transition: transform 80ms ease, filter 80ms ease;
+  }
+  .btn-act:active { transform: translateY(2px); filter: brightness(.95); }
+  .btn-act.cancel  { background: linear-gradient(180deg, #ff6b6b, var(--red));   border: 2px solid var(--red-d); }
+  .btn-act.confirm { background: linear-gradient(180deg, #6ed664, var(--green)); border: 2px solid var(--green-d); }
+  .cost { margin: 10px 0 0; text-align: center; font-size: 12px; color: #6b5944; }
+  .cost .gem-mini {
+    display: inline-block; width: 14px; height: 14px;
+    vertical-align: -3px; margin: 0 4px 0 0;
+    background: radial-gradient(circle at 35% 30%, #fff, #6cf 40%, #19c 75%);
+    border-radius: 4px; transform: rotate(45deg);
+    box-shadow: 0 0 6px #6cf;
+  }
+
+  /* Reset button (small, sits inside the screen above the nav) */
+  .reset-fab {
+    position: absolute;
+    right: 14px; top: 14px;
+    z-index: 3;
+    background: rgba(255,255,255,.85);
+    border: 2px solid var(--brown);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-weight: 800; font-size: 11px;
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 0 2px 0 rgba(0,0,0,.2);
+  }
+
+  /* Bottom nav */
+  .nav {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 18px 14px;
+    background: linear-gradient(180deg, #b78a5e, #8e6537);
+    border-top: 3px solid #5b4022;
+    flex-shrink: 0;
+  }
+  .nav .btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 3px solid var(--brown);
+    background: linear-gradient(180deg, #fff7e6, #f3e4c2);
+    display: grid; place-items: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,.25);
+    position: relative;
+    font-size: 22px; color: var(--ink);
+    cursor: pointer;
+  }
+  .nav .btn.center {
+    width: 72px; height: 72px;
+    background: radial-gradient(circle at 50% 35%, #fff0a8, #ffcd34 60%, #c98a1c);
+    margin-top: -22px;
+  }
+  .nav .btn .badge {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 22px; height: 22px;
+    border-radius: 999px;
+    background: var(--red);
+    color: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 0 rgba(0,0,0,.25);
+    font-weight: 900; font-size: 12px;
+    display: grid; place-items: center;
+    padding: 0 6px;
+  }
+  .nav .btn.back .arrow {
+    width: 26px; height: 14px;
+    position: relative;
+  }
+  .nav .btn.back .arrow::before {
+    content: '';
+    position: absolute; left: 0; top: 50%;
+    width: 22px; height: 4px;
+    background: var(--red);
+    border-radius: 2px;
+    transform: translateY(-50%);
+  }
+  .nav .btn.back .arrow::after {
+    content: '';
+    position: absolute; left: -2px; top: 50%;
+    width: 12px; height: 12px;
+    border-left: 4px solid var(--red);
+    border-bottom: 4px solid var(--red);
+    transform: translateY(-50%) rotate(45deg);
+  }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>GemMerge — Mockups</h1>
-    <p class="lead">Interactive HTML mockups for the Mergedom <strong>Max-Tier Merge Stone Confirmation</strong> feature. Open each on a phone or in a desktop browser.</p>
 
-    <div class="grid">
-      <a class="card" href="merge-confirm-demo.html">
-        <h2>Merge + Confirm Demo</h2>
-        <p>Drag-and-drop mini-board with 5 items + 3 max-tier gems. Same-tier items merge silently; gems trigger the confirm dialog.</p>
-        <span class="pill">Interactive</span>
-      </a>
+  <div class="phone" aria-label="Mergedom merge demo">
+    <div class="screen">
+      <div class="room-bg"></div>
 
-      <a class="card" href="max-tier-merge-stone-confirm.html">
-        <h2>Max-Tier Stone — Full Board</h2>
-        <p>Full 7×9 board populated across 8 item families with multiple max-tier examples. Demonstrates upgrade flow and the "already max" block-toast.</p>
-        <span class="pill">Interactive</span>
-      </a>
+      <button class="reset-fab" id="resetBtn" type="button">↻ Reset</button>
 
-      <a class="card" href="board-shell.html">
-        <h2>Board Shell</h2>
-        <p>Clean reusable UI shell — HUD, two empty orders, info banner, empty board, bottom nav. Starting template for new mockups.</p>
-        <span class="pill">Static</span>
-      </a>
+      <!-- HUD -->
+      <div class="hud">
+        <div class="pill energy"><span class="badge"></span>310<span class="plus">+</span></div>
+        <div class="pill star"><span class="badge"></span>2</div>
+        <div class="pill coin"><span class="badge"></span>1096<span class="plus">+</span></div>
+        <button class="cog" aria-label="Settings">⚙</button>
+      </div>
+
+      <!-- Two empty orders -->
+      <div class="avatars">
+        <div class="order">
+          <div class="npc bearded" aria-label="Customer"></div>
+          <div class="order-slot" aria-label="Order item"></div>
+          <div class="order-reward">+2</div>
+        </div>
+        <div class="order">
+          <div class="npc boy-npc" aria-label="Customer"></div>
+          <div class="order-slot" aria-label="Order item"></div>
+          <div class="order-reward">+1</div>
+        </div>
+      </div>
+
+      <!-- Info banner -->
+      <div class="banner">
+        <div class="info">
+          <span>Tap to see information about an item.</span>
+        </div>
+      </div>
+
+      <!-- Board -->
+      <div class="board-wrap">
+        <div class="board" id="board"></div>
+      </div>
+
+      <!-- Confirm dialog -->
+      <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" hidden>
+        <div class="dialog">
+          <h1 id="dlgTitle">Upgrade item?</h1>
+          <p class="sub">This will use your <strong>Max Merge Stone</strong>.</p>
+          <div class="preview">
+            <div class="slot">
+              <div id="iconBefore" class="icon"></div>
+              <span class="level-pill" id="lvBefore">Lv —</span>
+            </div>
+            <div class="arrow">→</div>
+            <div class="slot">
+              <div id="iconAfter" class="icon glow"></div>
+              <span class="level-pill next" id="lvAfter">Lv —</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-act cancel"  id="btnCancel"  type="button">Cancel</button>
+            <button class="btn-act confirm" id="btnConfirm" type="button">Confirm</button>
+          </div>
+          <p class="cost"><span class="gem-mini"></span>Costs 1 Max Merge Stone</p>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="nav">
+        <button class="btn back" aria-label="Back"><span class="arrow"></span><span class="badge">!</span></button>
+        <button class="btn" aria-label="Inventory">🎒<span class="badge" style="background:#fff;color:transparent;border-color:#fff">.</span></button>
+        <button class="btn center" aria-label="Home">🏠<span class="badge">3</span></button>
+        <button class="btn" aria-label="Shop">🏪<span class="badge">!</span></button>
+        <button class="btn" aria-label="Tasks">📋<span class="badge">1</span></button>
+      </div>
     </div>
-
-    <footer>
-      Source: <a href="https://github.com/BobbyAnalyst/GemMerge">github.com/BobbyAnalyst/GemMerge</a>
-    </footer>
   </div>
+
+  <div id="ghost"></div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   Item families. Tier counts pulled from mergedom_items.md,
+   which mirrors the balancing spreadsheet. T6 stone (201_06)
+   per mergedom_boosters.md.
+   ──────────────────────────────────────────────────────────── */
+const FAMILIES = {
+  soap:   { name: 'Soap',          id: '12_xx', glyph: '🧼', maxTier: 5  },
+  tool:   { name: 'Tools',         id: '31_xx', glyph: '🔧', maxTier: 11 },
+  clean:  { name: 'Cleaning',      id: '11_xx', glyph: '🧴', maxTier: 12 }
+};
+const GEM_GLYPH = '💎';
+
+/* Initial layout. 7 cols × 9 rows, indices 0–62.
+   Visual layout (X = empty cell):
+   row 0:  X X X X X X X
+   row 1:  X . . . . . X     . = filler row
+   row 2:  X S X S X . X     S = Soap T1
+   row 3:  X . T . T . X     T = Tools T2
+   row 4:  X . . C . . X     C = Cleaning T3
+   row 5:  X . . . . . X
+   row 6:  X G . G . G X     G = Gem (T6 stone)
+   row 7+: X . . . . . X
+*/
+const INITIAL = {
+  16: { kind: 'item', f: 'soap',  t: 1 },
+  18: { kind: 'item', f: 'soap',  t: 1 },
+  23: { kind: 'item', f: 'tool',  t: 2 },
+  25: { kind: 'item', f: 'tool',  t: 2 },
+  31: { kind: 'item', f: 'clean', t: 3 },
+  43: { kind: 'gem' },
+  45: { kind: 'gem' },
+  47: { kind: 'gem' }
+};
+
+const board = document.getElementById('board');
+const overlay  = document.getElementById('overlay');
+const iconBefore = document.getElementById('iconBefore');
+const iconAfter  = document.getElementById('iconAfter');
+const lvBefore   = document.getElementById('lvBefore');
+const lvAfter    = document.getElementById('lvAfter');
+const btnCancel  = document.getElementById('btnCancel');
+const btnConfirm = document.getElementById('btnConfirm');
+const ghost      = document.getElementById('ghost');
+
+let cells = [];
+function buildBoard() {
+  board.innerHTML = '';
+  cells = [];
+  for (let i = 0; i < 63; i++) {
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.dataset.idx = i;
+    if (INITIAL[i]) c.appendChild(makePiece(INITIAL[i]));
+    board.appendChild(c);
+    cells.push(c);
+  }
+}
+function makePiece(data) {
+  const el = document.createElement('div');
+  el.dataset.kind = data.kind;
+  if (data.kind === 'gem') {
+    el.className = 'item gem';
+    el.innerHTML = '<span class="glyph">' + GEM_GLYPH + '</span>';
+  } else {
+    const fam = FAMILIES[data.f];
+    el.className = 'item';
+    el.dataset.family = data.f;
+    el.dataset.tier = String(data.t);
+    el.innerHTML =
+      '<span class="glyph">' + fam.glyph + '</span>' +
+      '<span class="tier-pill">Lv ' + data.t + '</span>';
+  }
+  return el;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Drag and drop
+   ──────────────────────────────────────────────────────────── */
+let drag = null;     // { source, originCell }
+let lastHover = null;
+
+function setGhost(x, y) {
+  ghost.style.transform = 'translate(' + (x - 28) + 'px, ' + (y - 28) + 'px) scale(1.1)';
+}
+function clearHover() {
+  if (lastHover) lastHover.classList.remove('drop-ok','drop-merge','drop-confirm','drop-bad');
+  lastHover = null;
+}
+function classifyDrop(sourceEl, targetCell) {
+  // Returns: 'move' | 'merge' | 'confirm' | 'bad'
+  if (!targetCell) return 'bad';
+  const targetItem = targetCell.querySelector('.item');
+  if (!targetItem) return 'move';
+  if (targetItem === sourceEl) return 'bad';
+  const srcKind = sourceEl.dataset.kind;
+  const tgtKind = targetItem.dataset.kind;
+  if (srcKind === 'gem' && tgtKind === 'item') return 'confirm';
+  if (srcKind === 'item' && tgtKind === 'item') {
+    if (sourceEl.dataset.family === targetItem.dataset.family
+        && sourceEl.dataset.tier === targetItem.dataset.tier) {
+      const fam = FAMILIES[sourceEl.dataset.family];
+      const t = parseInt(sourceEl.dataset.tier, 10);
+      if (t < fam.maxTier) return 'merge';
+    }
+  }
+  return 'bad';
+}
+
+document.addEventListener('pointerdown', (e) => {
+  const target = e.target.closest('.item');
+  if (!target) return;
+  if (overlay && !overlay.hidden) return; // dialog open → don't drag
+  e.preventDefault();
+  drag = { source: target, originCell: target.parentElement };
+  ghost.innerHTML = '';
+  const ghostInner = target.cloneNode(true);
+  ghostInner.style.width  = '100%';
+  ghostInner.style.height = '100%';
+  ghostInner.style.fontSize = '24px';
+  ghost.appendChild(ghostInner);
+  ghost.classList.add('is-dragging');
+  setGhost(e.clientX, e.clientY);
+  target.classList.add('dragging');
+});
+
+document.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  setGhost(e.clientX, e.clientY);
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const cell = el && el.closest && el.closest('.cell');
+  if (cell !== lastHover) {
+    clearHover();
+    if (cell) {
+      lastHover = cell;
+      const k = classifyDrop(drag.source, cell);
+      if (k === 'move')    cell.classList.add('drop-ok');
+      if (k === 'merge')   cell.classList.add('drop-merge');
+      if (k === 'confirm') cell.classList.add('drop-confirm');
+      if (k === 'bad')     cell.classList.add('drop-bad');
+    }
+  }
+});
+
+document.addEventListener('pointerup', (e) => {
+  if (!drag) return;
+  ghost.classList.remove('is-dragging');
+  ghost.innerHTML = '';
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const cell = el && el.closest && el.closest('.cell');
+  drag.source.classList.remove('dragging');
+  const kind = classifyDrop(drag.source, cell);
+  clearHover();
+  const src = drag.source;
+  const origin = drag.originCell;
+  drag = null;
+
+  if (kind === 'move') {
+    cell.appendChild(src);
+  } else if (kind === 'merge') {
+    const fam = FAMILIES[src.dataset.family];
+    const newT = parseInt(src.dataset.tier, 10) + 1;
+    const target = cell.querySelector('.item');
+    target.remove();
+    src.remove();
+    const upgraded = makePiece({ kind: 'item', f: src.dataset.family, t: newT });
+    cell.appendChild(upgraded);
+    upgraded.classList.add('upgrading');
+    setTimeout(() => upgraded.classList.remove('upgrading'), 650);
+  } else if (kind === 'confirm') {
+    openDialog(src, cell);
+  }
+  // 'bad' → nothing; the source stays in its origin cell
+});
+
+document.addEventListener('pointercancel', () => {
+  if (!drag) return;
+  ghost.classList.remove('is-dragging');
+  ghost.innerHTML = '';
+  drag.source.classList.remove('dragging');
+  clearHover();
+  drag = null;
+});
+
+/* ─────────────────────────────────────────────────────────────
+   Confirm dialog
+   ──────────────────────────────────────────────────────────── */
+let pending = null; // { gemEl, targetItemEl, targetCell }
+
+function openDialog(gemEl, cell) {
+  const targetItem = cell.querySelector('.item');
+  pending = { gemEl, targetItemEl: targetItem, targetCell: cell };
+  const fam = FAMILIES[targetItem.dataset.family];
+  const t = parseInt(targetItem.dataset.tier, 10);
+  iconBefore.innerHTML = '<span>' + fam.glyph + '</span>';
+  iconAfter.innerHTML  = '<span>' + fam.glyph + '</span>';
+  lvBefore.textContent = 'Lv ' + t;
+  lvAfter.textContent  = 'Lv ' + (t + 1);
+  overlay.hidden = false;
+}
+function closeDialog() {
+  overlay.hidden = true;
+  pending = null;
+}
+btnCancel.addEventListener('click', closeDialog);
+btnConfirm.addEventListener('click', () => {
+  if (!pending) { closeDialog(); return; }
+  const { gemEl, targetItemEl, targetCell } = pending;
+  const fam = targetItemEl.dataset.family;
+  const newT = parseInt(targetItemEl.dataset.tier, 10) + 1;
+  targetItemEl.remove();
+  gemEl.remove();
+  const upgraded = makePiece({ kind: 'item', f: fam, t: newT });
+  targetCell.appendChild(upgraded);
+  upgraded.classList.add('upgrading');
+  setTimeout(() => upgraded.classList.remove('upgrading'), 650);
+  closeDialog();
+});
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeDialog(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDialog(); });
+
+/* Reset */
+document.getElementById('resetBtn').addEventListener('click', buildBoard);
+
+/* Init */
+buildBoard();
+</script>
 </body>
 </html>
